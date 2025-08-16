@@ -1,16 +1,16 @@
 from openf1.api.handler import ApiHandler
-from openf1.models.position import Position
+from openf1.models.starting_grid import StartingGrid
 from typing import List
 import re
 import pandas as pd
 
-class PositionEndpoint:
+class StartingGridEndpoint:
     def __init__(self, api_handler: ApiHandler):
         self.api_handler = api_handler
 
-    def get_position(self, **kwargs) -> List[Position]:
+    def get_starting_grid(self, **kwargs) -> List[StartingGrid]:
         """
-        Retrieves position data.
+        Retrieves starting grid data.
         """
         processed_params = {}
         for key, value in kwargs.items():
@@ -25,10 +25,10 @@ class PositionEndpoint:
             else:
                 processed_params[key] = value
         
-        df = self.api_handler.get("position", params=processed_params)
+        df = self.api_handler.get("starting_grid", params=processed_params)
         
         if not df.empty:
             # Replace NaN with None for Pydantic compatibility
             df = df.where(pd.notnull(df), None)
-            return [Position(**row) for index, row in df.iterrows()]
+            return [StartingGrid(**row) for index, row in df.iterrows()]
         return []

@@ -1,16 +1,16 @@
 from openf1.api.handler import ApiHandler
-from openf1.models.position import Position
+from openf1.models.session_result import SessionResult
 from typing import List
 import re
 import pandas as pd
 
-class PositionEndpoint:
+class SessionResultEndpoint:
     def __init__(self, api_handler: ApiHandler):
         self.api_handler = api_handler
 
-    def get_position(self, **kwargs) -> List[Position]:
+    def get_session_result(self, **kwargs) -> List[SessionResult]:
         """
-        Retrieves position data.
+        Retrieves session result data.
         """
         processed_params = {}
         for key, value in kwargs.items():
@@ -25,10 +25,10 @@ class PositionEndpoint:
             else:
                 processed_params[key] = value
         
-        df = self.api_handler.get("position", params=processed_params)
+        df = self.api_handler.get("session_result", params=processed_params)
         
         if not df.empty:
             # Replace NaN with None for Pydantic compatibility
             df = df.where(pd.notnull(df), None)
-            return [Position(**row) for index, row in df.iterrows()]
+            return [SessionResult(**row) for index, row in df.iterrows()]
         return []
