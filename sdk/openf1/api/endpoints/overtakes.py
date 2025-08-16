@@ -1,29 +1,18 @@
 from openf1.api.handler import ApiHandler
 from openf1.models.overtake import Overtake
 from typing import List
-import re
 import pandas as pd
+from ._base import BaseEndpoint
 
-class OvertakesEndpoint:
+class OvertakesEndpoint(BaseEndpoint):
     def __init__(self, api_handler: ApiHandler):
-        self.api_handler = api_handler
+        super().__init__(api_handler)
 
     def get_overtakes(self, **kwargs) -> List[Overtake]:
         """
         Retrieves overtake data.
         """
-        processed_params = {}
-        for key, value in kwargs.items():
-            if isinstance(value, str) and any(op in value for op in ['>=', '<=', '>', '<']):
-                operator_match = re.search(r'(>=|<=|>|<)', value)
-                if operator_match:
-                    operator = operator_match.group(1)
-                    numeric_value = value.replace(operator, '')
-                    processed_params[f"{key}{operator}{numeric_value}"] = ''
-                else:
-                    processed_params[key] = value
-            else:
-                processed_params[key] = value
+        processed_params = self._process_kwargs(**kwargs)
         
         df = self.api_handler.get("overtakes", params=processed_params)
         
