@@ -6,6 +6,8 @@ A Python SDK for the [OpenF1 Api](https://github.com/br-g/openf1) that provides 
 
 This Python SDK simplifies interactions with the OpenF1 API, allowing you to easily retrieve various types of Formula 1 data such as lap times, driver information, car telemetry, and more directly within your Python applications.
 
+NB: As this is a side project developed in my spare time with assistance from Gemini CLI, please bear with any imperfections.
+
 ## Installation
 
 To install the OpenF1 Python SDK, you can use pip:
