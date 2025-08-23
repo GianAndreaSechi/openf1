@@ -52,6 +52,26 @@ You can use the MCP Inspector to test the server and interact with the available
 
     The Inspector will automatically connect to the MCP server running on `localhost:80`.
 
+3. Test on Claude Desktop and add this configuration:
+   ```json
+   {
+        "mcpServers": {
+            "openf1-mcp-server": {
+                "command": "npx",
+                "args": [
+                    "-y", 
+                    "mcp-remote@latest",
+                    "http://localhost:80/mcp",
+                    "Accept: application/json, text/event-stream", 
+                    "--transport",
+                    "http-only"
+                ]
+            }
+        }
+    }
+   ```
+
+
 ## Project Structure
 
 ```
