@@ -1,3 +1,4 @@
 fastmcp
 loguru
 uvicorn
+openf1-sdk
