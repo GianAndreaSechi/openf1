@@ -3,6 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.position_dto import PositionDTO
+import json
 
 def register_tools(mcp):
     """Register all position tools for the MCP Server"""
@@ -13,7 +14,7 @@ def register_tools(mcp):
         try:
             kwargs = position_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting position with parameters: {kwargs}")
-            data = openf1_client.position.get_position(**kwargs)
+            data = json.loads(openf1_client.position.get_position(**kwargs))
             return McpResponse(message="Position retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving position: {e}")

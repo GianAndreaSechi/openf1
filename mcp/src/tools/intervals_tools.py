@@ -3,6 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.interval_dto import IntervalDTO
+import json
 
 def register_tools(mcp):
     """Register all intervals tools for the MCP Server"""
@@ -13,7 +14,7 @@ def register_tools(mcp):
         try:
             kwargs = interval_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting intervals with parameters: {kwargs}")
-            data = openf1_client.intervals.get_intervals(**kwargs)
+            data = json.loads(openf1_client.intervals.get_intervals(**kwargs))
             return McpResponse(message="Intervals retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving intervals: {e}")

@@ -3,6 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.race_control_dto import RaceControlDTO
+import json
 
 def register_tools(mcp):
     """Register all race_control tools for the MCP Server"""
@@ -13,7 +14,7 @@ def register_tools(mcp):
         try:
             kwargs = race_control_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting race_control with parameters: {kwargs}")
-            data = openf1_client.race_control.get_race_control_messages(**kwargs)
+            data = json.loads(openf1_client.race_control.get_race_control_messages(**kwargs))
             return McpResponse(message="Race control retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving race_control: {e}")
