@@ -2,30 +2,16 @@ from fastmcp import Context
 from dto.McpResponse import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
+from dto.car_data_dto import CarDataDTO
 
 def register_tools(mcp):
     """Register all car_data tools for the MCP Server"""
 
     @mcp.tool("get_car_data")
-    async def get_car_data(
-        ctx: Context,
-        brake: int = None,
-        date: str = None,
-        driver_number: int = None,
-        drs: int = None,
-        meeting_key: int = None,
-        n_gear: int = None,
-        rpm: int = None,
-        session_key: int = None,
-        speed: int = None,
-        throttle: int = None,
-    ) -> McpResponse:
+    async def get_car_data(ctx: Context, car_data_dto: CarDataDTO) -> McpResponse:
         """Use to get car_data data"""
         try:
-            kwargs = locals()
-            kwargs.pop("ctx")
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
-            
+            kwargs = car_data_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting car_data with parameters: {kwargs}")
             data = openf1_client.car_data.get_car_data(**kwargs)
             return McpResponse(message="Car data retrieved successfully", data=data)

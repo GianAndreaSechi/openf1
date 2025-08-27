@@ -2,30 +2,16 @@ from fastmcp import Context
 from dto.McpResponse import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
+from dto.race_control_dto import RaceControlDTO
 
 def register_tools(mcp):
     """Register all race_control tools for the MCP Server"""
 
     @mcp.tool("get_race_control_messages")
-    async def get_race_control_messages(
-        ctx: Context,
-        category: str = None,
-        date: str = None,
-        driver_number: int = None,
-        flag: str = None,
-        lap_number: int = None,
-        meeting_key: int = None,
-        message: str = None,
-        scope: str = None,
-        sector: int = None,
-        session_key: int = None,
-    ) -> McpResponse:
+    async def get_race_control_messages(ctx: Context, race_control_dto: RaceControlDTO) -> McpResponse:
         """Use to get race_control data"""
         try:
-            kwargs = locals()
-            kwargs.pop("ctx")
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
-
+            kwargs = race_control_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting race_control with parameters: {kwargs}")
             data = openf1_client.race_control.get_race_control_messages(**kwargs)
             return McpResponse(message="Race control retrieved successfully", data=data)

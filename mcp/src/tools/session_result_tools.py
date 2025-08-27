@@ -2,30 +2,16 @@ from fastmcp import Context
 from dto.McpResponse import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
+from dto.session_result_dto import SessionResultDTO
 
 def register_tools(mcp):
     """Register all session_result tools for the MCP Server"""
 
     @mcp.tool("get_session_result")
-    async def get_session_result(
-        ctx: Context,
-        dnf: bool = None,
-        dns: bool = None,
-        dsq: bool = None,
-        driver_number: int = None,
-        duration: float = None,
-        gap_to_leader: float = None,
-        number_of_laps: int = None,
-        meeting_key: int = None,
-        position: int = None,
-        session_key: int = None,
-    ) -> McpResponse:
+    async def get_session_result(ctx: Context, session_result_dto: SessionResultDTO) -> McpResponse:
         """Use to get session_result data"""
         try:
-            kwargs = locals()
-            kwargs.pop("ctx")
-            kwargs = {k: v for k, v in kwargs.items() if v is not None}
-
+            kwargs = session_result_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting session_result with parameters: {kwargs}")
             data = openf1_client.session_result.get_session_result(**kwargs)
             return McpResponse(message="Session result retrieved successfully", data=data)
