@@ -1,7 +1,7 @@
 import time
 from fastmcp import Context
 from loguru import logger
-from dto.McpResponse import McpResponse
+from dto.mcp_response import McpResponse
 
 def register_tools(mcp):
     """Register all healthz tools for the MCP Server"""

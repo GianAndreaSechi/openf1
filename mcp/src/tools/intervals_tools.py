@@ -1,5 +1,5 @@
 from fastmcp import Context
-from dto.McpResponse import McpResponse
+from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.interval_dto import IntervalDTO
