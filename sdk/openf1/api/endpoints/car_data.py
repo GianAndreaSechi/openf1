@@ -1,23 +1,22 @@
+import json
 from openf1.api.handler import ApiHandler
 from openf1.models.car_data import CarData
-from typing import List
-import pandas as pd
+from typing import List, Dict, Any
 from ._base import BaseEndpoint
 
 class CarDataEndpoint(BaseEndpoint):
     def __init__(self, api_handler: ApiHandler):
         super().__init__(api_handler)
 
-    def get_car_data(self, **kwargs) -> List[CarData]:
+    def get_car_data(self, **kwargs) -> str:
         """
         Retrieves car data.
         """
         processed_params = self._process_kwargs(**kwargs)
         
-        df = self.api_handler.get("car_data", params=processed_params)
+        data_list = self.api_handler.get("car_data", params=processed_params)
         
-        if not df.empty:
-            # Replace NaN with None for Pydantic compatibility
-            df = df.where(pd.notnull(df), None)
-            return [CarData(**row) for index, row in df.iterrows()]
-        return []
+        if data_list:
+            car_data_models = [CarData(**item) for item in data_list]
+            return json.dumps([model.model_dump() for model in car_data_models])
+        return "[]"
