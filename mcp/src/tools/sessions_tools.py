@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.session_dto import SessionDTO
-import json
+
 
 def register_tools(mcp):
     """Register all sessions tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = session_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting sessions with parameters: {kwargs}")
-            data = json.loads(openf1_client.sessions.get_sessions(**kwargs))
+            sessions = openf1_client.sessions.get_sessions(**kwargs)
+            data = [session.to_dict() for session in sessions]
             return McpResponse(message="Sessions retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving sessions: {e}")

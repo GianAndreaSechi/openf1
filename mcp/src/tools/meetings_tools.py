@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.meeting_dto import MeetingDTO
-import json
+
 
 def register_tools(mcp):
     """Register all meetings tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = meeting_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting meetings with parameters: {kwargs}")
-            data = json.loads(openf1_client.meetings.get_meetings(**kwargs))
+            results = openf1_client.meetings.get_meetings(**kwargs)
+            data = [result.to_dict() for result in results]
             return McpResponse(message="Meetings retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving meetings: {e}")

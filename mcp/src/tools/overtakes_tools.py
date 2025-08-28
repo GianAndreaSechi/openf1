@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.overtake_dto import OvertakeDTO
-import json
+
 
 def register_tools(mcp):
     """Register all overtakes tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = overtake_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting overtakes with parameters: {kwargs}")
-            data = json.loads(openf1_client.overtakes.get_overtakes(**kwargs))
+            results = openf1_client.overtakes.get_overtakes(**kwargs)
+            data = [result.to_dict() for result in results]
             return McpResponse(message="Overtakes retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving overtakes: {e}")

@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.weather_dto import WeatherDTO
-import json
+
 
 def register_tools(mcp):
     """Register all weather tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = weather_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting weather with parameters: {kwargs}")
-            data = json.loads(openf1_client.weather.get_weather(**kwargs))
+            results = openf1_client.weather.get_weather(**kwargs)
+            data = [result.to_dict() for result in results]
             return McpResponse(message="Weather retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving weather: {e}")

@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.lap_dto import LapDTO
-import json
+
 
 def register_tools(mcp):
     """Register all laps tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = lap_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting laps with parameters: {kwargs}")
-            data = json.loads(openf1_client.laps.get_laps(**kwargs))
+            laps = openf1_client.laps.get_laps(**kwargs)
+            data = [lap.to_dict() for lap in laps]
             return McpResponse(message="Laps retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving laps: {e}")

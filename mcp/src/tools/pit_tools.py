@@ -3,7 +3,7 @@ from dto.mcp_response import McpResponse
 from openf1_client import openf1_client
 from loguru import logger
 from dto.pit_dto import PitDTO
-import json
+
 
 def register_tools(mcp):
     """Register all pit tools for the MCP Server"""
@@ -14,7 +14,8 @@ def register_tools(mcp):
         try:
             kwargs = pit_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting pit with parameters: {kwargs}")
-            data = json.loads(openf1_client.pit.get_pit(**kwargs))
+            results = openf1_client.pit.get_pit(**kwargs)
+            data = [result.to_dict() for result in results]
             return McpResponse(message="Pit retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving pit: {e}")
