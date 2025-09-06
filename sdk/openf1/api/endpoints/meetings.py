@@ -1,8 +1,7 @@
 from openf1.api.handler import ApiHandler
+from ._base import BaseEndpoint
 from openf1.models.meeting import Meeting
 from typing import List
-import pandas as pd
-from ._base import BaseEndpoint
 
 class MeetingsEndpoint(BaseEndpoint):
     def __init__(self, api_handler: ApiHandler):
@@ -14,10 +13,8 @@ class MeetingsEndpoint(BaseEndpoint):
         """
         processed_params = self._process_kwargs(**kwargs)
         
-        df = self.api_handler.get("meetings", params=processed_params)
+        data_list = self.api_handler.get("meetings", params=processed_params)
         
-        if not df.empty:
-            # Replace NaN with None for Pydantic compatibility
-            df = df.where(pd.notnull(df), None)
-            return [Meeting(**row) for index, row in df.iterrows()]
+        if data_list:
+            return [Meeting(**item) for item in data_list]
         return []
