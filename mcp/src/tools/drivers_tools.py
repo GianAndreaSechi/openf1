@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = driver_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting drivers with parameters: {kwargs}")
             results = openf1_client.drivers.get_drivers(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Drivers retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving drivers: {e}")

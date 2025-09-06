@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = starting_grid_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting starting_grid with parameters: {kwargs}")
             results = openf1_client.starting_grid.get_starting_grid(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Starting grid retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving starting_grid: {e}")

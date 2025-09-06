@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = position_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting position with parameters: {kwargs}")
             results = openf1_client.position.get_position(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Position retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving position: {e}")

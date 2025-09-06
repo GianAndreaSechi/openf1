@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = team_radio_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting team_radio with parameters: {kwargs}")
             results = openf1_client.team_radio.get_team_radio(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Team radio retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving team_radio: {e}")

@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = lap_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting laps with parameters: {kwargs}")
             laps = openf1_client.laps.get_laps(**kwargs)
-            data = [lap.to_dict() for lap in laps]
+            data = [lap.model_dump() for lap in laps]
             return McpResponse(message="Laps retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving laps: {e}")

@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = weather_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting weather with parameters: {kwargs}")
             results = openf1_client.weather.get_weather(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Weather retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving weather: {e}")

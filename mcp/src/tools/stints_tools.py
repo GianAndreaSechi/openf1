@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = stint_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting stints with parameters: {kwargs}")
             results = openf1_client.stints.get_stints(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Stints retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving stints: {e}")

@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = session_result_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting session_result with parameters: {kwargs}")
             results = openf1_client.session_result.get_session_result(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Session result retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving session_result: {e}")

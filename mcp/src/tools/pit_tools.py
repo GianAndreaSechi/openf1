@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = pit_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting pit with parameters: {kwargs}")
             results = openf1_client.pit.get_pit(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Pit retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving pit: {e}")

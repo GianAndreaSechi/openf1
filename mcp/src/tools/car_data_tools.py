@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = car_data_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting car_data with parameters: {kwargs}")
             results = openf1_client.car_data.get_car_data(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Car data retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving car_data: {e}")

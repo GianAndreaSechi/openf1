@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = session_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting sessions with parameters: {kwargs}")
             sessions = openf1_client.sessions.get_sessions(**kwargs)
-            data = [session.to_dict() for session in sessions]
+            data = [session.model_dump() for session in sessions]
             return McpResponse(message="Sessions retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving sessions: {e}")

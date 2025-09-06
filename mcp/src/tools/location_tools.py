@@ -15,7 +15,7 @@ def register_tools(mcp):
             kwargs = location_dto.model_dump(exclude_unset=True)
             logger.info(f"Getting location with parameters: {kwargs}")
             results = openf1_client.location.get_location(**kwargs)
-            data = [result.to_dict() for result in results]
+            data = [result.model_dump() for result in results]
             return McpResponse(message="Location retrieved successfully", data=data)
         except Exception as e:
             logger.error(f"Error retrieving location: {e}")
