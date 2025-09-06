@@ -1,14 +1,13 @@
-import json
 from openf1.api.handler import ApiHandler
-from openf1.models.lap import Lap
-from typing import List, Dict, Any
 from ._base import BaseEndpoint
+from openf1.models.lap import Lap
+from typing import List
 
 class LapsEndpoint(BaseEndpoint):
     def __init__(self, api_handler: ApiHandler):
         super().__init__(api_handler)
 
-    def get_laps(self, **kwargs) -> str:
+    def get_laps(self, **kwargs) -> List[Lap]:
         """
         Retrieves lap data.
         """
@@ -17,6 +16,5 @@ class LapsEndpoint(BaseEndpoint):
         data_list = self.api_handler.get("laps", params=processed_params)
         
         if data_list:
-            lap_models = [Lap(**item) for item in data_list]
-            return json.dumps([model.model_dump() for model in lap_models])
-        return "[]"
+            return [Lap(**item) for item in data_list]
+        return []

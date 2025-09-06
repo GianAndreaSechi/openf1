@@ -8,15 +8,14 @@ class SessionResultEndpoint(BaseEndpoint):
     def __init__(self, api_handler: ApiHandler):
         super().__init__(api_handler)
 
-    def get_session_result(self, **kwargs) -> str:
+    def get_session_result(self, **kwargs) -> List[SessionResult]:
         """
         Retrieves session result data.
         """
         processed_params = self._process_kwargs(**kwargs)
-        
+
         data_list = self.api_handler.get("session_result", params=processed_params)
-        
+
         if data_list:
-            session_result_models = [SessionResult(**item) for item in data_list]
-            return json.dumps([model.model_dump() for model in session_result_models])
-        return "[]"
+            return [SessionResult(**item) for item in data_list]
+        return []
